@@ -1,0 +1,39 @@
+.redirect-rectangle {
+    width: 16%;
+    height: 5%;
+    background-color: #5921dd;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    display: inline-block;
+    margin: 0 0.5%;
+}
+
+.redirect-rectangle:hover {
+    cursor: pointer;
+}
+
+
+.number-input {
+    width: 50px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid black;
+    }
+    
+.number-input:focus {
+    outline: none;
+    }
+
+.form-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body{
+    background: rgb(151,190,192);
+    background: radial-gradient(circle, rgba(151,190,192,1) 0%, rgba(146,191,191,1) 0%, rgba(146,191,191,1) 1%, rgba(238,174,202,0.1825105042016807) 99%);
+}

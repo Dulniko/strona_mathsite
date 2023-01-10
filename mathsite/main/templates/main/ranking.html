@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% block title %}Ranking{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+        <label for="sort_by">Sortuj wg:</label>
+        <select id="sort_by" name="sort_by"> {% comment %} onchange="this.form.submit()" {% endcomment %}
+            <option value="-Score">---------</option>
+            <option value="PlayerName">Imienia</option>
+            <option value="Score">Wyniku rosnąco</option>
+            <option value="-Score">Wyniku malejąco</option>
+        </select>
+        {% if user.is_authenticated %}
+            <label for="filter_by">Pokaż tylko własne</label>
+            <input type="checkbox" id="filter_by" name="filter_by"> 
+        {% endif %}
+        <input type="submit" value="Zatwierdź">
+    </form>
+</div>
+
+{% if rk10 %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Imię</th>
+                <th scope="col">Wynik</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in rk10 %}
+                <tr>
+                    <td>{{ object.PlayerName }}</td>
+                    <td>{{ object.Score }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Brak danych w bazie.</p>
+{% endif %} 
+
+{% endblock content %}

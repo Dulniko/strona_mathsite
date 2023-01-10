@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+{% block title %}Mnożenie 10 przykładów{% endblock %}
+
+{% block content %}
+
+{% comment %} <input type="text" class="number-input" id="number-input" name="number_input"> {% endcomment %}
+
+<form class="form-center" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="current_question" id="current-question" value="{{ question }}">
+  <label>{{ question.0 }} * {{ question.1 }} = <input type="text" class="number-input" id="number-input" name="current_answer"></label>
+  
+  <p>{{ correct_answers }}/{{ nr_question }}</p>
+
+</form>
+
+
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+
+{% if gz %}
+
+Gratulacje udało ci się zodobyć {{ correct_answers }} na {{ nr_question }} możliwych!
+
+{% else %}
+
+Niestety nie udało tobię się zdobyć nawet połowy punktów. Wynik {{ correct_answers }}/{{ nr_question }}
+
+{% endif %}
+
+{% endblock content %}
