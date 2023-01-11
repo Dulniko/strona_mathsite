@@ -44,20 +44,20 @@ def mnozenie10(request):
         # print(request.POST['current_answer'])
         # print(request.POST['current_question'])
         # pobieramy aktualne pytanie i odpowiedź z formularza
-        current_question = literal_eval(request.POST['current_question'])
+        print(request.session['question'])
         if request.POST['current_answer']:
             current_answer = int(request.POST['current_answer'])
         else:
             current_answer = "101"
         #sprawdzanie czy takie same 
-        is_answer_correct = (current_question[0]*current_question[1]) == current_answer
+        is_answer_correct = (request.session['question'][0]*request.session['question'][1]) == current_answer
         if is_answer_correct:
             request.session['correct_answers'] = request.session.get('correct_answers', 0) + 1
         
         # pobieramy kolejne pytanie
-        next_question = [randint(1, 10), randint(1, 10)]
+        request.session['question'] = [randint(1, 10), randint(1, 10)]
         
-        return render(request, 'main/mnozenie10.html', {'question': next_question, 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     elif request.session.get('nr', 0) == 10:
         #dodanie do bazy
         if request.user.is_authenticated:
@@ -78,27 +78,26 @@ def mnozenie10(request):
     else:
         request.session['nr'] = 0
         request.session['correct_answers'] = 0
-        first_question = [randint(1, 10), randint(1, 10)]
-        return render(request, 'main/mnozenie10.html', {'question': first_question, 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        request.session['question'] = [randint(1, 10), randint(1, 10)]
+        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
 def mnozenie50(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 50):
         request.session['nr'] = request.session.get('nr', 0) + 1
         # pobieramy aktualne pytanie i odpowiedź z formularza
-        current_question = literal_eval(request.POST['current_question'])
         if request.POST['current_answer']:
             current_answer = int(request.POST['current_answer'])
         else:
             current_answer = "101"
         #sprawdzanie czy takie same 
-        is_answer_correct = (current_question[0]*current_question[1]) == current_answer
+        is_answer_correct = (request.session['question'][0]*request.session['question'][1]) == current_answer
         if is_answer_correct:
             request.session['correct_answers'] = request.session.get('correct_answers', 0) + 1
         
         # pobieramy kolejne pytanie
-        next_question = [randint(1, 10), randint(1, 10)]
+        request.session['question'] = [randint(1, 10), randint(1, 10)]
         
-        return render(request, 'main/mnozenie10.html', {'question': next_question, 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     elif request.session.get('nr', 0) == 50:
         #dodanie do bazy
         if request.user.is_authenticated:
@@ -119,8 +118,8 @@ def mnozenie50(request):
     else:
         request.session['nr'] = 0
         request.session['correct_answers'] = 0
-        first_question = [randint(1, 10), randint(1, 10)]
-        return render(request, 'main/mnozenie10.html', {'question': first_question, 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        request.session['question'] = [randint(1, 10), randint(1, 10)]
+        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
 
 
