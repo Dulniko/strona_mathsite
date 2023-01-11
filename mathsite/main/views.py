@@ -3,7 +3,6 @@ from django.contrib.auth import login
 from django.http import HttpResponse
 from .models import RankingTo10, RankingTo50
 from random import randint
-from ast import literal_eval
 
 def mainpage(response):
     return render(response, "main/mainpage.html")

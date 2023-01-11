@@ -1,5 +1,5 @@
 .redirect-rectangle {
-    width: 16%;
+    width: 24%;
     height: 5%;
     background-color: #5921dd;
     border-radius: 5px;
@@ -16,9 +16,9 @@
 
 
 .number-input {
-    width: 50px;
-    height: 30px;
-    font-size: 20px;
+    width: 150px;
+    height: 70px;
+    font-size: 50px;
     text-align: center;
     border: 2px solid black;
     }
@@ -29,8 +29,18 @@
 
 .form-center {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form-center label {
+    font-size: 50px;
+    margin-top: 20%;
+    margin-bottom: 10px;
+}
+.form-center p{
+    font-size: 30px;
 }
 
 body{

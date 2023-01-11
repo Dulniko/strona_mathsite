@@ -9,4 +9,12 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
-        
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        try:
+            User.objects.get(email=email)
+            raise forms.ValidationError("This email is already registered. Please enter a different email.")
+        except User.DoesNotExist:
+            return email
+
