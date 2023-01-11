@@ -84,8 +84,6 @@ def mnozenie10(request):
 def mnozenie50(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 50):
         request.session['nr'] = request.session.get('nr', 0) + 1
-        # print(request.POST['current_answer'])
-        # print(request.POST['current_question'])
         # pobieramy aktualne pytanie i odpowiedź z formularza
         current_question = literal_eval(request.POST['current_question'])
         if request.POST['current_answer']:
