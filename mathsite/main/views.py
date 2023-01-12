@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import RankingTo10, RankingTo50
 from random import randint
@@ -40,9 +41,7 @@ def mnozenie(request):
 def mnozenie10(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 10):
         request.session['nr'] = request.session.get('nr', 0) + 1
-        # print(request.POST['current_answer'])
-        # print(request.POST['current_question'])
-        # pobieramy aktualne pytanie i odpowiedź z formularza
+        # pobieramy aktualną odpowiedź z formularza
         print(request.session['question'])
         if request.POST['current_answer']:
             current_answer = int(request.POST['current_answer'])
@@ -83,7 +82,7 @@ def mnozenie10(request):
 def mnozenie50(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 50):
         request.session['nr'] = request.session.get('nr', 0) + 1
-        # pobieramy aktualne pytanie i odpowiedź z formularza
+        # pobieramy aktualną odpowiedź z formularza
         if request.POST['current_answer']:
             current_answer = int(request.POST['current_answer'])
         else:
@@ -120,6 +119,8 @@ def mnozenie50(request):
         request.session['question'] = [randint(1, 10), randint(1, 10)]
         return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
-
+@login_required
+def profile(request):
+    return render(request, "main/profile.html")
 
 
