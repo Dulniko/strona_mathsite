@@ -18,7 +18,7 @@
           
           <span class="navbar-text">
             {% if user.is_authenticated %}
-              Zalogowano jako <a href="/profile/">{{ user.username }}</a>. <a href="/logout">Wyloguj</a>
+              Zalogowano jako <a href="{% url 'profile' %}">{{ user.username }}</a>. <a href="/logout">Wyloguj</a>
             {% else %}
               Wygląda na to, że nie jesteś zalogowany. <a href="/login">Kliknij by się zalogować</a>
             {% endif %}

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 from django.http import HttpResponse
 from .models import RankingTo10, RankingTo50
 from random import randint
@@ -37,7 +39,7 @@ def ranking50(request):
 
 def mnozenie(request):
     return render(request, "main/mnozenie.html")
-
+    
 def mnozenie10(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 10):
         request.session['nr'] = request.session.get('nr', 0) + 1
@@ -119,8 +121,10 @@ def mnozenie50(request):
         request.session['question'] = [randint(1, 10), randint(1, 10)]
         return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
-@login_required
-def profile(request):
-    return render(request, "main/profile.html")
+class profile(LoginRequiredMixin,View):
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        return render(request, 'main/profile.html', {'user': user})
+        
 
 
