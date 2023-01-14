@@ -2,5 +2,12 @@
 {% block title %}{{ user }}{% endblock title %}
 
 {% block content %}
-{{ user.email }}
+<div class="smt_fancy">Twoja nazwa: {{ user }}</div>
+<div class="smt_fancy">Twój email: {{ user.email }}</div>
+<div class="redirect-rectangle"><a href="{% url 'deleteAcc' %}">Usuń konto</a></div>
+
+{% for a in sc %}
+{{ a.Score }}<br>
+{% endfor %}
+
 {% endblock content %}

@@ -10,4 +10,5 @@ urlpatterns = [
     path("mnozenie10/", views.mnozenie10, name="mnozenie10"),
     path("mnozenie50/", views.mnozenie50, name="mnozenie50"),
     path('profile/', views.profile.as_view(), name='profile'),
+    path("profile/delete", views.deleteAccount.as_view(), name="deleteAcc"),
 ]

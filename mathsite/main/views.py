@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from django.views.generic import DeleteView
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 from .models import RankingTo10, RankingTo50
 from random import randint
 
@@ -44,7 +47,6 @@ def mnozenie10(request):
     if (request.method == 'POST') and (request.session.get('nr', 0) < 10):
         request.session['nr'] = request.session.get('nr', 0) + 1
         # pobieramy aktualną odpowiedź z formularza
-        print(request.session['question'])
         if request.POST['current_answer']:
             current_answer = int(request.POST['current_answer'])
         else:
@@ -121,10 +123,22 @@ def mnozenie50(request):
         request.session['question'] = [randint(1, 10), randint(1, 10)]
         return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
-class profile(LoginRequiredMixin,View):
+class profile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        user = self.request.user
-        return render(request, 'main/profile.html', {'user': user})
+        scores = RankingTo10.objects.filter(PlayerName=request.user)
+        return render(request, 'main/profile.html', {'user': request.user, "sc":scores})
+
+class deleteAccount(LoginRequiredMixin, DeleteView):
+    model = get_user_model()
+    success_url = reverse_lazy('mainpage')
+    template_name = 'main/deleteAcc.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
         
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+        
+
 
 
