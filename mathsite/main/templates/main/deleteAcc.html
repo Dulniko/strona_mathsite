@@ -2,7 +2,7 @@
 {% block title %}Usuwanie konta{% endblock title %}
 {% block content %}
   <h1>Napewno chcesz usunąć konto?</h1>
-  <form method="post" action="{% url 'deleteAcc' %}">
+  <form method="post" action="{% url 'deleteAcc' username=user.username %}">
     {% csrf_token %}
     <input type="submit" value="Usuń">
   </form>

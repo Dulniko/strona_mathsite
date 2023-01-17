@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.views.generic import DeleteView
+from django.views.generic.edit import DeleteView
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from .models import RankingTo10, RankingTo50
@@ -23,7 +23,7 @@ def ranking10(request):
     filter_by = request.POST.get('filter_by', '')
 
     if filter_by:
-        rk = RankingTo10.objects.filter(PlayerName=request.user.username).order_by(sort_by)
+        rk = RankingTo10.objects.filter(PlayerName=request.user).order_by(sort_by)
     else:
         rk = RankingTo10.objects.all().order_by(sort_by)
     return render(request, "main/ranking.html", {"rk":rk})
@@ -35,7 +35,7 @@ def ranking50(request):
     filter_by = request.POST.get('filter_by', '')
 
     if filter_by:
-        rk = RankingTo50.objects.filter(PlayerName=request.user.username).order_by(sort_by)
+        rk = RankingTo50.objects.filter(PlayerName=request.user).order_by(sort_by)
     else:
         rk = RankingTo50.objects.all().order_by(sort_by)
     return render(request, "main/ranking.html", {"rk":rk})
@@ -63,10 +63,10 @@ def mnozenie10(request):
     elif request.session.get('nr', 0) == 10:
         #dodanie do bazy
         if request.user.is_authenticated:
-            m = RankingTo10(PlayerName = request.user.username, Score = request.session['correct_answers'])
+            m = RankingTo10(PlayerName=request.user, Score=request.session['correct_answers'])
             m.save()
         else:
-            m = RankingTo10(PlayerName = "Anonim", Score = request.session['correct_answers'])
+            m = RankingTo10(PlayerName=None, Score=request.session['correct_answers'])
             m.save()
         number_of_q = request.session['nr']
         number_of_correct_a = request.session['correct_answers']
@@ -103,10 +103,10 @@ def mnozenie50(request):
     elif request.session.get('nr', 0) == 50:
         #dodanie do bazy
         if request.user.is_authenticated:
-            m = RankingTo50(PlayerName = request.user.username, Score = request.session['correct_answers'])
+            m = RankingTo50(PlayerName=request.user, Score=request.session['correct_answers'])
             m.save()
         else:
-            m = RankingTo50(PlayerName = "Anonim", Score = request.session['correct_answers'])
+            m = RankingTo50(PlayerName=None, Score=request.session['correct_answers'])
             m.save()
         number_of_q = request.session['nr']
         number_of_correct_a = request.session['correct_answers']
@@ -125,18 +125,20 @@ def mnozenie50(request):
     
 class profile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        scores = RankingTo10.objects.filter(PlayerName=request.user)
-        return render(request, 'main/profile.html', {'user': request.user, "sc":scores})
+        return render(request, 'main/profile.html', {'user': request.user})
 
 class deleteAccount(LoginRequiredMixin, DeleteView):
-    model = get_user_model()
-    success_url = reverse_lazy('mainpage')
+    model = User
     template_name = 'main/deleteAcc.html'
+    success_url = reverse_lazy('mainpage')
 
-    def get_object(self, queryset=None):
-        return self.request.user
-        
+    def get_object(self):
+        username = self.kwargs.get("username")
+        return User.objects.get(username=username)
+
     def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        RankingTo10.objects.filter(PlayerName=user).delete()
         return super().delete(request, *args, **kwargs)
         
 
