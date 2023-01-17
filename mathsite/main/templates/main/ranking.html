@@ -31,7 +31,7 @@
         <tbody>
             {% for object in rk %}
                 <tr>
-                    <td>{{ object.PlayerName }}</td>
+                    <td>{% if object.PlayerName %}{{ object.PlayerName }} {% else %} Anonim {% endif %}</td>
                     <td>{{ object.Score }}</td>
                 </tr>
             {% endfor %}

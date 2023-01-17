@@ -6,11 +6,11 @@ class RankingTo10(models.Model):
     Score = models.IntegerField()
 
     def __str__(self):
-        return self.PlayerName.username if self.PlayerName else 'Anonim'
+        return self.PlayerName.username 
 
 class RankingTo50(models.Model):
     PlayerName = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     Score = models.IntegerField()
 
     def __str__(self):
-        return self.PlayerName.username if self.PlayerName else 'Anonim'
+        return self.PlayerName.username 
