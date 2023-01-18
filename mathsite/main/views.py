@@ -40,35 +40,45 @@ def ranking50(request):
         rk = RankingTo50.objects.all().order_by(sort_by)
     return render(request, "main/ranking.html", {"rk":rk})
 
-def mnozenie(request):
+def SelOfMult(request):
     return render(request, "main/mnozenie.html")
-    
-def mnozenie10(request):
-    if (request.method == 'POST') and (request.session.get('nr', 0) < 10):
+
+def Multiplication(request, nr_of_questions):
+    if (request.method == 'POST') and (request.session.get('nr', 0) < nr_of_questions):
         request.session['nr'] = request.session.get('nr', 0) + 1
+
         # pobieramy aktualną odpowiedź z formularza
         if request.POST['current_answer']:
-            current_answer = int(request.POST['current_answer'])
+                current_answer = int(request.POST['current_answer'])
         else:
             current_answer = "101"
+
         #sprawdzanie czy takie same 
         is_answer_correct = (request.session['question'][0]*request.session['question'][1]) == current_answer
         if is_answer_correct:
             request.session['correct_answers'] = request.session.get('correct_answers', 0) + 1
-        
+
         # pobieramy kolejne pytanie
         request.session['question'] = [randint(1, 10), randint(1, 10)]
-        
+
         return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
-    elif request.session.get('nr', 0) == 10:
-        #dodanie do bazy
-        if request.user.is_authenticated:
-            m = RankingTo10(PlayerName=request.user, Score=request.session['correct_answers'])
-            m.save()
-        else:
-            m = RankingTo10(PlayerName=None, Score=request.session['correct_answers'])
-            m.save()
-        number_of_q = request.session['nr']
+    
+    elif request.session.get('nr', 0) == nr_of_questions:
+        if nr_of_questions == 50:
+            if request.user.is_authenticated:
+                m = RankingTo50(PlayerName=request.user, Score=request.session['correct_answers'])
+                m.save()
+            else:
+                m = RankingTo50(PlayerName=None, Score=request.session['correct_answers'])
+                m.save()
+
+        elif nr_of_questions == 10:
+            if request.user.is_authenticated:
+                m = RankingTo10(PlayerName=request.user, Score=request.session['correct_answers'])
+                m.save()
+            else:
+                m = RankingTo10(PlayerName=None, Score=request.session['correct_answers'])
+                m.save()
         number_of_correct_a = request.session['correct_answers']
         if (request.session['correct_answers']*2)>=request.session['nr']:
             gz = True
@@ -76,53 +86,13 @@ def mnozenie10(request):
             gz = False
         request.session['nr'] = 0
         request.session['correct_answers'] = 0
-        return render(request, "main/congratulations.html", {'correct_answers': number_of_correct_a, 'nr_question': number_of_q, "gz":gz})
+        return render(request, "main/congratulations.html", {'correct_answers': number_of_correct_a, 'nr_question': nr_of_questions, "gz":gz})
     else:
         request.session['nr'] = 0
         request.session['correct_answers'] = 0
         request.session['question'] = [randint(1, 10), randint(1, 10)]
         return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
-    
-def mnozenie50(request):
-    if (request.method == 'POST') and (request.session.get('nr', 0) < 50):
-        request.session['nr'] = request.session.get('nr', 0) + 1
-        # pobieramy aktualną odpowiedź z formularza
-        if request.POST['current_answer']:
-            current_answer = int(request.POST['current_answer'])
-        else:
-            current_answer = "101"
-        #sprawdzanie czy takie same 
-        is_answer_correct = (request.session['question'][0]*request.session['question'][1]) == current_answer
-        if is_answer_correct:
-            request.session['correct_answers'] = request.session.get('correct_answers', 0) + 1
-        
-        # pobieramy kolejne pytanie
-        request.session['question'] = [randint(1, 10), randint(1, 10)]
-        
-        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
-    elif request.session.get('nr', 0) == 50:
-        #dodanie do bazy
-        if request.user.is_authenticated:
-            m = RankingTo50(PlayerName=request.user, Score=request.session['correct_answers'])
-            m.save()
-        else:
-            m = RankingTo50(PlayerName=None, Score=request.session['correct_answers'])
-            m.save()
-        number_of_q = request.session['nr']
-        number_of_correct_a = request.session['correct_answers']
-        if (request.session['correct_answers']*2)>=request.session['nr']:
-            gz = True
-        else:
-            gz = False
-        request.session['nr'] = 0
-        request.session['correct_answers'] = 0
-        return render(request, "main/congratulations.html", {'correct_answers': number_of_correct_a, 'nr_question': number_of_q, "gz":gz})
-    else:
-        request.session['nr'] = 0
-        request.session['correct_answers'] = 0
-        request.session['question'] = [randint(1, 10), randint(1, 10)]
-        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
-    
+
 class profile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'main/profile.html', {'user': request.user})
