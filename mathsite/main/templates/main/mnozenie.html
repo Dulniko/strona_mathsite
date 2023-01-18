@@ -1,16 +1,17 @@
 {% extends 'main/base.html' %}
-{% block title %}Wybór ilości przykładów{% endblock %}
+{% block title %}Mnożenie{% endblock %}
 
 {% block content %}
 
-Wybierz ilość przykładów:
+<form class="form-center" method="post">
+  {% csrf_token %}
+  
+  <label>{{ question.0 }} * {{ question.1 }} = <input type="text" class="number-input" id="number-input" name="current_answer"></label>
+  
+  <p>Poprawnych odpowiedzi: {{ correct_answers }}/{{ nr_question }}</p>
 
-<div class="redirect-rectangle" onclick="window.location='/mnozenie/10/'">
-    10
-</div>
-<div class="redirect-rectangle" onclick="window.location='/mnozenie/50/'">
-    50
-</div>
+
+</form>
 
 
 

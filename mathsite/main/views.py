@@ -16,32 +16,23 @@ def mainpage(response):
 def rankingi(request):
     return render(request, "main/rankingi.html")
 
-def ranking10(request):
+def ranking(request, nr_of_questions):
     sort_by = request.POST.get("sort_by", "-Score")
-    rk = RankingTo10.objects.all().order_by(sort_by)
-    
+    if nr_of_questions == 50:
+        rk = RankingTo50
+    elif nr_of_questions == 10:
+        rk = RankingTo10
+
     filter_by = request.POST.get('filter_by', '')
 
     if filter_by:
-        rk = RankingTo10.objects.filter(PlayerName=request.user).order_by(sort_by)
+        rk = rk.objects.filter(PlayerName=request.user).order_by(sort_by)
     else:
-        rk = RankingTo10.objects.all().order_by(sort_by)
-    return render(request, "main/ranking.html", {"rk":rk})
-
-def ranking50(request):
-    sort_by = request.POST.get("sort_by", "-Score")
-    rk = RankingTo50.objects.all().order_by(sort_by)
-    
-    filter_by = request.POST.get('filter_by', '')
-
-    if filter_by:
-        rk = RankingTo50.objects.filter(PlayerName=request.user).order_by(sort_by)
-    else:
-        rk = RankingTo50.objects.all().order_by(sort_by)
+        rk = rk.objects.all().order_by(sort_by)
     return render(request, "main/ranking.html", {"rk":rk})
 
 def SelOfMult(request):
-    return render(request, "main/mnozenie.html")
+    return render(request, "main/SelectMult.html")
 
 def Multiplication(request, nr_of_questions):
     if (request.method == 'POST') and (request.session.get('nr', 0) < nr_of_questions):
@@ -61,7 +52,7 @@ def Multiplication(request, nr_of_questions):
         # pobieramy kolejne pytanie
         request.session['question'] = [randint(1, 10), randint(1, 10)]
 
-        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        return render(request, 'main/mnozenie.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
     
     elif request.session.get('nr', 0) == nr_of_questions:
         if nr_of_questions == 50:
@@ -91,7 +82,7 @@ def Multiplication(request, nr_of_questions):
         request.session['nr'] = 0
         request.session['correct_answers'] = 0
         request.session['question'] = [randint(1, 10), randint(1, 10)]
-        return render(request, 'main/mnozenie10.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
+        return render(request, 'main/mnozenie.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
 
 class profile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
