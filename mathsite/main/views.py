@@ -97,10 +97,7 @@ class deleteAccount(LoginRequiredMixin, DeleteView):
         username = self.kwargs.get("username")
         return User.objects.get(username=username)
 
-    def delete(self, request, *args, **kwargs):
-        user = self.get_object()
-        RankingTo10.objects.filter(PlayerName=user).delete()
-        return super().delete(request, *args, **kwargs)
+    
         
 
 
