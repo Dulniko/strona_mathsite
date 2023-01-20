@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic.edit import DeleteView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse_lazy
 from .models import RankingTo10, RankingTo50
 from random import randint
@@ -92,10 +92,14 @@ class deleteAccount(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'main/deleteAcc.html'
     success_url = reverse_lazy('mainpage')
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
 
-    def get_object(self):
-        username = self.kwargs.get("username")
-        return User.objects.get(username=username)
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user != self.get_object():
+            # return an error message or redirect
+            return HttpResponseForbidden("You are not allowed to delete other users account!")
+        return super().dispatch(request, *args, **kwargs)
 
     
         
