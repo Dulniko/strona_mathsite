@@ -84,11 +84,11 @@ def Multiplication(request, nr_of_questions):
         request.session['question'] = [randint(1, 10), randint(1, 10)]
         return render(request, 'main/mnozenie.html', {'question': request.session['question'], 'correct_answers': request.session['correct_answers'], 'nr_question': request.session['nr']})
 
-class profile(LoginRequiredMixin, View):
+class Profile(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'main/profile.html', {'user': request.user})
 
-class deleteAccount(LoginRequiredMixin, DeleteView):
+class DeleteAccount(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'main/deleteAcc.html'
     success_url = reverse_lazy('mainpage')
@@ -97,8 +97,7 @@ class deleteAccount(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user != self.get_object():
-            # return an error message or redirect
-            return HttpResponseForbidden("You are not allowed to delete other users account!")
+            return HttpResponseForbidden("Nie możesz usuwać kont innych użytkowników!")
         return super().dispatch(request, *args, **kwargs)
 
     
