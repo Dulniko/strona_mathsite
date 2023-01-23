@@ -16,12 +16,14 @@ def mainpage(response):
 def rankingi(request):
     return render(request, "main/rankingi.html")
 
-def ranking(request, nr_of_questions):
-    sort_by = request.POST.get("sort_by", "-Score")
-    if nr_of_questions == 50:
+def ranking(request, model):
+    if model == "RankingTo50":
         rk = RankingTo50
-    elif nr_of_questions == 10:
+    elif model == "RankingTo10":
         rk = RankingTo10
+    else:
+        rk = None
+    sort_by = request.POST.get("sort_by", "-Score")
 
     filter_by = request.POST.get('filter_by', '')
 
@@ -97,7 +99,7 @@ class DeleteAccount(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user != self.get_object():
-            return HttpResponseForbidden("Nie możesz usuwać kont innych użytkowników!")
+            return HttpResponseForbidden("Nie możesz usuwać kont innych użytkowników!", status=403)
         return super().dispatch(request, *args, **kwargs)
 
     

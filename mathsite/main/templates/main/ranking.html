@@ -21,22 +21,26 @@
 </div>
 
 {% if rk %}
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Imię</th>
-                <th scope="col">Wynik</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for object in rk %}
+    {% comment %} <form method="post" action="{% url 'delete_selected' %}"> {% endcomment %}
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
-                    <td>{% if object.PlayerName %}{{ object.PlayerName }} {% else %} Anonim {% endif %}</td>
-                    <td>{{ object.Score }}</td>
+                    <th scope="col">Imię</th>
+                    <th scope="col">Wynik</th>
+                    <th scope="col"><button type="submit" class="btn btn-danger" name="delete_selected">Usuń zaznaczone</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for object in rk %}
+                    <tr>
+                        <td>{% if object.PlayerName %}{{ object.PlayerName }} {% else %} Anonim {% endif %}</td>
+                        <td>{{ object.Score }}</td>
+                        <td>{% if object.PlayerName.pk == request.user.pk %} <input type="checkbox" name="delete_record" value="{{ object.pk }}"> {% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% comment %} </form> {% endcomment %}
 {% else %}
     <p>Brak danych w bazie.</p>
 {% endif %} 
