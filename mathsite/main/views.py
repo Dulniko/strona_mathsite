@@ -23,8 +23,14 @@ def ranking(request, model):
         rk = RankingTo10
     else:
         rk = None
-    sort_by = request.POST.get("sort_by", "-Score")
 
+    if request.method == 'POST':
+        if 'delete_selected' in request.POST:
+            selected_records = request.POST.getlist('delete_record')
+            if selected_records:
+                rk.objects.filter(pk__in=selected_records).delete()
+
+    sort_by = request.POST.get("sort_by", "-Score")
     filter_by = request.POST.get('filter_by', '')
 
     if filter_by:

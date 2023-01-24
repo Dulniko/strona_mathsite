@@ -21,13 +21,14 @@
 </div>
 
 {% if rk %}
-    {% comment %} <form method="post" action="{% url 'delete_selected' %}"> {% endcomment %}
+    <form method="post">
+        {% csrf_token %}
         <table class="table">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Imię</th>
                     <th scope="col">Wynik</th>
-                    <th scope="col"><button type="submit" class="btn btn-danger" name="delete_selected">Usuń zaznaczone</th>
+                    <th scope="col"><button type="submit" class="btn btn-danger" name="delete_selected">Usuń zaznaczone</button></th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +41,7 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% comment %} </form> {% endcomment %}
+    </form>
 {% else %}
     <p>Brak danych w bazie.</p>
 {% endif %} 
