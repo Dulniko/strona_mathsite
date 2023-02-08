@@ -28,7 +28,7 @@
                 <tr>
                     <th scope="col">Imię</th>
                     <th scope="col">Wynik</th>
-                    <th scope="col"><button type="submit" class="btn btn-danger" name="delete_selected">Usuń zaznaczone</button></th>
+                    <th scope="col">{% if user.is_authenticated %}<button type="submit" class="btn btn-danger" name="delete_selected">Usuń zaznaczone</button>{% endif %}</th>
                 </tr>
             </thead>
             <tbody>
